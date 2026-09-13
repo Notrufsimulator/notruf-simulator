@@ -146,6 +146,7 @@ const WORKER_URL =
 "https://notruf-api.keymasterjonas.workers.dev";
 
 let currentNumber = "";
+  let conversation = [];
 
 function add(number){
 
@@ -203,6 +204,7 @@ chat(
 "112",
 "Notruf 112. Wo befindet sich der Notfall?"
 );
+  conversation = [];
 
 }
 
@@ -218,6 +220,11 @@ if(!text) return;
 
 chat("Du",text);
 
+conversation.push({
+role:"user",
+content:text
+});
+
 input.value = "";
 
 try{
@@ -231,7 +238,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-message:text
+messages:conversation
 })
 }
 );
@@ -243,6 +250,10 @@ chat(
 "112",
 data.answer
 );
+  conversation.push({
+role:"assistant",
+content:data.answer
+});
 
 }catch{
 
