@@ -3,202 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notruf Simulator 112</title>
+<title>Leitstelle 112 Simulator</title>
 
 <style>
 body{
-    margin:0;
-    background:#0f172a;
-    color:white;
-    font-family:Arial,sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+background:#0f172a;
+color:white;
+font-family:Arial;
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
 .phone{
-    width:380px;
-    background:#1e293b;
-    border-radius:25px;
-    padding:20px;
-    box-shadow:0 0 25px rgba(0,0,0,0.5);
+width:420px;
+background:#1e293b;
+border-radius:20px;
+padding:20px;
 }
 
 .display{
-    background:#111827;
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
+background:#111827;
+padding:15px;
+border-radius:10px;
+text-align:center;
 }
 
 #number{
-    font-size:40px;
-    min-height:50px;
+font-size:40px;
+margin-bottom:10px;
 }
 
 #status{
-    color:#22c55e;
-    margin-top:10px;
+color:#22c55e;
 }
 
 .keypad{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:20px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:20px;
 }
 
 .key{
-    height:70px;
-    font-size:26px;
-    border:none;
-    border-radius:50%;
-    background:#374151;
-    color:white;
-    cursor:pointer;
-}
-
-.key:hover{
-    background:#4b5563;
+height:70px;
+font-size:24px;
+border:none;
+border-radius:50%;
+background:#374151;
+color:white;
+cursor:pointer;
 }
 
 .call{
-    background:#22c55e;
+background:#22c55e;
 }
 
 .chat{
-    margin-top:20px;
-    background:#111827;
-    border-radius:10px;
-    padding:10px;
-    height:220px;
-    overflow-y:auto;
-}
-
-.message{
-    margin-bottom:10px;
+height:250px;
+overflow-y:auto;
+background:#111827;
+margin-top:20px;
+padding:10px;
+border-radius:10px;
 }
 
 .inputArea{
-    display:none;
-    margin-top:10px;
+display:none;
+margin-top:10px;
 }
 
 .inputArea input{
-    width:70%;
-    padding:10px;
+width:70%;
+padding:10px;
 }
 
 .inputArea button{
-    padding:10px;
+padding:10px;
 }
 </style>
+
 </head>
+
 <body>
 
 <div class="phone">
 
 <div class="display">
+
 <div id="number"></div>
-<div id="status">Nummer eingeben</div>
+
+<div id="status">
+Nummer eingeben
+</div>
+
 </div>
 
 <div class="keypad">
 
-<button class="key" onclick="addNumber('1')">1</button>
-<button class="key" onclick="addNumber('2')">2</button>
-<button class="key" onclick="addNumber('3')">3</button>
+<button class="key" onclick="add('1')">1</button>
+<button class="key" onclick="add('2')">2</button>
+<button class="key" onclick="add('3')">3</button>
 
-<button class="key" onclick="addNumber('4')">4</button>
-<button class="key" onclick="addNumber('5')">5</button>
-<button class="key" onclick="addNumber('6')">6</button>
+<button class="key" onclick="add('4')">4</button>
+<button class="key" onclick="add('5')">5</button>
+<button class="key" onclick="add('6')">6</button>
 
-<button class="key" onclick="addNumber('7')">7</button>
-<button class="key" onclick="addNumber('8')">8</button>
-<button class="key" onclick="addNumber('9')">9</button>
+<button class="key" onclick="add('7')">7</button>
+<button class="key" onclick="add('8')">8</button>
+<button class="key" onclick="add('9')">9</button>
 
-<button class="key" onclick="deleteNumber()">⌫</button>
-<button class="key" onclick="addNumber('0')">0</button>
-<button class="key call" onclick="callNumber()">📞</button>
+<button class="key" onclick="removeDigit()">⌫</button>
+<button class="key" onclick="add('0')">0</button>
+
+<button class="key call" onclick="call112()">
+📞
+</button>
 
 </div>
 
 <div id="chat" class="chat"></div>
 
-<div class="inputArea" id="inputArea">
-<input id="userInput" placeholder="Antwort eingeben">
-<button onclick="sendMessage()">Senden</button>
+<div id="inputArea" class="inputArea">
+
+<input
+id="message"
+placeholder="Antwort eingeben">
+
+<button onclick="sendMessage()">
+Senden
+</button>
+
 </div>
 
 </div>
 
 <script>
 
+const WORKER_URL =
+"https://notruf-api.keymasterjonas.workers.dev";
+
 let currentNumber = "";
 
-const scenarios = {
+function add(number){
 
-brand: [
-"Welche Adresse hat das Gebäude?",
-"Befinden sich noch Personen im Gebäude?",
-"Wie stark ist die Rauchentwicklung?",
-"Sind Flammen sichtbar?",
-"Vielen Dank. Die Feuerwehr ist alarmiert."
-],
+currentNumber += number;
 
-unfall: [
-"Wo genau ist der Unfall passiert?",
-"Wie viele Fahrzeuge sind beteiligt?",
-"Gibt es eingeklemmte Personen?",
-"Wie viele Verletzte gibt es?",
-"Vielen Dank. Rettungsdienst und Feuerwehr sind unterwegs."
-],
+document.getElementById("number")
+.innerText = currentNumber;
 
-bewusstlos: [
-"Wie lautet die Adresse?",
-"Atmet die Person noch?",
-"Reagiert die Person auf Ansprache?",
-"Wie alt ist die Person ungefähr?",
-"Vielen Dank. Rettungsdienst ist alarmiert."
-],
-
-herzinfarkt: [
-"Wie lautet die Adresse?",
-"Hat die Person Brustschmerzen?",
-"Ist die Person ansprechbar?",
-"Seit wann bestehen die Beschwerden?",
-"Vielen Dank. Rettungsdienst ist alarmiert."
-]
-
-};
-
-let currentQuestions = [];
-let currentQuestion = 0;
-
-let currentQuestion = 0;
-
-function addNumber(number){
-    currentNumber += number;
-    document.getElementById("number").innerText = currentNumber;
 }
 
-function deleteNumber(){
-    currentNumber = currentNumber.slice(0,-1);
-    document.getElementById("number").innerText = currentNumber;
+function removeDigit(){
+
+currentNumber =
+currentNumber.slice(0,-1);
+
+document.getElementById("number")
+.innerText = currentNumber;
+
 }
 
-function addChat(sender,text){
+function chat(sender,text){
 
-    const chat = document.getElementById("chat");
+const box =
+document.getElementById("chat");
 
-    chat.innerHTML += `
-        <div class="message">
-        <b>${sender}:</b> ${text}
-        </div>
-    `;
+box.innerHTML +=
+`<p><b>${sender}:</b> ${text}</p>`;
 
-    chat.scrollTop = chat.scrollHeight;
+box.scrollTop =
+box.scrollHeight;
+
 }
 
 function call112(){
@@ -206,69 +184,75 @@ function call112(){
 if(currentNumber !== "112"){
 
 document.getElementById("status")
-.innerText = "❌ Nummer unbekannt";
+.innerText =
+"❌ Nummer unbekannt";
 
 return;
+
 }
-
-const scenarioNames =
-Object.keys(scenarios);
-
-const randomScenario =
-scenarioNames[
-Math.floor(
-Math.random()*scenarioNames.length
-)
-];
-
-currentQuestions =
-scenarios[randomScenario];
-
-currentQuestion = 0;
 
 document.getElementById("status")
 .innerText =
 "Verbunden mit Leitstelle";
 
 document.getElementById("inputArea")
-.style.display = "block";
+.style.display =
+"block";
 
-addChat(
-"Leitstelle 112",
-currentQuestions[currentQuestion]
+chat(
+"112",
+"Notruf 112. Wo befindet sich der Notfall?"
 );
 
-currentQuestion++;
-}
 }
 
-function sendMessage(){
+async function sendMessage(){
 
-    const input =
-    document.getElementById("userInput");
+const input =
+document.getElementById("message");
 
-    const text = input.value;
+const text =
+input.value;
 
-    if(!text) return;
+if(!text) return;
 
-    addChat("Du",text);
+chat("Du",text);
 
-    input.value = "";
+input.value = "";
 
-    setTimeout(() => {
+try{
 
-        if(currentQuestion < currentQuestions.length){
+const response =
+await fetch(
+WORKER_URL,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:text
+})
+}
+);
 
-            addChat(
-                "Leitstelle 112",
-                currentQuestions[currentQuestion]
+const data =
+await response.json();
 
-            );
+chat(
+"112",
+data.answer
+);
 
-            currentQuestion++;
-        }
+}catch{
 
-    },1000);
+chat(
+"112",
+"Verbindung zur Leitstelle nicht möglich."
+);
+
+}
+
 }
 
 </script>
