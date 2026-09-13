@@ -137,15 +137,44 @@ body{
 
 let currentNumber = "";
 
-const questions = [
-    "Wie lautet Ihr Name?",
-    "Wie lautet die genaue Adresse des Notfalls?",
-    "Was genau ist passiert?",
-    "Wie viele Personen sind betroffen?",
-    "Gibt es Verletzte?",
-    "Gibt es besondere Gefahren wie Feuer oder Rauch?",
-    "Vielen Dank. Die Einsatzkräfte wurden informiert."
-];
+const scenarios = {
+
+brand: [
+"Welche Adresse hat das Gebäude?",
+"Befinden sich noch Personen im Gebäude?",
+"Wie stark ist die Rauchentwicklung?",
+"Sind Flammen sichtbar?",
+"Vielen Dank. Die Feuerwehr ist alarmiert."
+],
+
+unfall: [
+"Wo genau ist der Unfall passiert?",
+"Wie viele Fahrzeuge sind beteiligt?",
+"Gibt es eingeklemmte Personen?",
+"Wie viele Verletzte gibt es?",
+"Vielen Dank. Rettungsdienst und Feuerwehr sind unterwegs."
+],
+
+bewusstlos: [
+"Wie lautet die Adresse?",
+"Atmet die Person noch?",
+"Reagiert die Person auf Ansprache?",
+"Wie alt ist die Person ungefähr?",
+"Vielen Dank. Rettungsdienst ist alarmiert."
+],
+
+herzinfarkt: [
+"Wie lautet die Adresse?",
+"Hat die Person Brustschmerzen?",
+"Ist die Person ansprechbar?",
+"Seit wann bestehen die Beschwerden?",
+"Vielen Dank. Rettungsdienst ist alarmiert."
+]
+
+};
+
+let currentQuestions = [];
+let currentQuestion = 0;
 
 let currentQuestion = 0;
 
@@ -172,26 +201,45 @@ function addChat(sender,text){
     chat.scrollTop = chat.scrollHeight;
 }
 
-function callNumber(){
+function call112(){
 
-    if(currentNumber !== "112"){
+if(currentNumber !== "112"){
 
-        document.getElementById("status")
-        .innerText = "❌ Nummer unbekannt";
+document.getElementById("status")
+.innerText = "❌ Nummer unbekannt";
 
-        return;
-    }
+return;
+}
 
-    document.getElementById("status")
-    .innerText = "Verbunden mit 112";
+const scenarioNames =
+Object.keys(scenarios);
 
-    document.getElementById("inputArea")
-    .style.display = "block";
+const randomScenario =
+scenarioNames[
+Math.floor(
+Math.random()*scenarioNames.length
+)
+];
 
-    addChat(
-        "Leitstelle 112",
-        "Notruf 112. Wo befindet sich der Notfall?"
-    );
+currentQuestions =
+scenarios[randomScenario];
+
+currentQuestion = 0;
+
+document.getElementById("status")
+.innerText =
+"Verbunden mit Leitstelle";
+
+document.getElementById("inputArea")
+.style.display = "block";
+
+addChat(
+"Leitstelle 112",
+currentQuestions[currentQuestion]
+);
+
+currentQuestion++;
+}
 }
 
 function sendMessage(){
@@ -209,11 +257,12 @@ function sendMessage(){
 
     setTimeout(() => {
 
-        if(currentQuestion < questions.length){
+        if(currentQuestion < currentQuestions.length){
 
             addChat(
                 "Leitstelle 112",
-                questions[currentQuestion]
+                currentQuestions[currentQuestion]
+
             );
 
             currentQuestion++;
