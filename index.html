@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notruf Simulator 112</title>
+
+<style>
+body{
+    margin:0;
+    background:#0f172a;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.phone{
+    width:380px;
+    background:#1e293b;
+    border-radius:25px;
+    padding:20px;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+.display{
+    background:#111827;
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+}
+
+#number{
+    font-size:40px;
+    min-height:50px;
+}
+
+#status{
+    color:#22c55e;
+    margin-top:10px;
+}
+
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:20px;
+}
+
+.key{
+    height:70px;
+    font-size:26px;
+    border:none;
+    border-radius:50%;
+    background:#374151;
+    color:white;
+    cursor:pointer;
+}
+
+.key:hover{
+    background:#4b5563;
+}
+
+.call{
+    background:#22c55e;
+}
+
+.chat{
+    margin-top:20px;
+    background:#111827;
+    border-radius:10px;
+    padding:10px;
+    height:220px;
+    overflow-y:auto;
+}
+
+.message{
+    margin-bottom:10px;
+}
+
+.inputArea{
+    display:none;
+    margin-top:10px;
+}
+
+.inputArea input{
+    width:70%;
+    padding:10px;
+}
+
+.inputArea button{
+    padding:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+<div class="display">
+<div id="number"></div>
+<div id="status">Nummer eingeben</div>
+</div>
+
+<div class="keypad">
+
+<button class="key" onclick="addNumber('1')">1</button>
+<button class="key" onclick="addNumber('2')">2</button>
+<button class="key" onclick="addNumber('3')">3</button>
+
+<button class="key" onclick="addNumber('4')">4</button>
+<button class="key" onclick="addNumber('5')">5</button>
+<button class="key" onclick="addNumber('6')">6</button>
+
+<button class="key" onclick="addNumber('7')">7</button>
+<button class="key" onclick="addNumber('8')">8</button>
+<button class="key" onclick="addNumber('9')">9</button>
+
+<button class="key" onclick="deleteNumber()">⌫</button>
+<button class="key" onclick="addNumber('0')">0</button>
+<button class="key call" onclick="callNumber()">📞</button>
+
+</div>
+
+<div id="chat" class="chat"></div>
+
+<div class="inputArea" id="inputArea">
+<input id="userInput" placeholder="Antwort eingeben">
+<button onclick="sendMessage()">Senden</button>
+</div>
+
+</div>
+
+<script>
+
+let currentNumber = "";
+
+const questions = [
+    "Wie lautet Ihr Name?",
+    "Wie lautet die genaue Adresse des Notfalls?",
+    "Was genau ist passiert?",
+    "Wie viele Personen sind betroffen?",
+    "Gibt es Verletzte?",
+    "Gibt es besondere Gefahren wie Feuer oder Rauch?",
+    "Vielen Dank. Die Einsatzkräfte wurden informiert."
+];
+
+let currentQuestion = 0;
+
+function addNumber(number){
+    currentNumber += number;
+    document.getElementById("number").innerText = currentNumber;
+}
+
+function deleteNumber(){
+    currentNumber = currentNumber.slice(0,-1);
+    document.getElementById("number").innerText = currentNumber;
+}
+
+function addChat(sender,text){
+
+    const chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="message">
+        <b>${sender}:</b> ${text}
+        </div>
+    `;
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function callNumber(){
+
+    if(currentNumber !== "112"){
+
+        document.getElementById("status")
+        .innerText = "❌ Nummer unbekannt";
+
+        return;
+    }
+
+    document.getElementById("status")
+    .innerText = "Verbunden mit 112";
+
+    document.getElementById("inputArea")
+    .style.display = "block";
+
+    addChat(
+        "Leitstelle 112",
+        "Notruf 112. Wo befindet sich der Notfall?"
+    );
+}
+
+function sendMessage(){
+
+    const input =
+    document.getElementById("userInput");
+
+    const text = input.value;
+
+    if(!text) return;
+
+    addChat("Du",text);
+
+    input.value = "";
+
+    setTimeout(() => {
+
+        if(currentQuestion < questions.length){
+
+            addChat(
+                "Leitstelle 112",
+                questions[currentQuestion]
+            );
+
+            currentQuestion++;
+        }
+
+    },1000);
+}
+
+</script>
+
+</body>
+</html>
