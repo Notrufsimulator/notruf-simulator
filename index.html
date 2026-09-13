@@ -135,6 +135,9 @@ placeholder="Antwort eingeben">
 <button onclick="sendMessage()">
 Senden
 </button>
+  <button onclick="startVoice()">
+🎤 Sprechen
+</button>
 
 </div>
 
@@ -250,6 +253,9 @@ chat(
 "112",
 data.answer
 );
+  
+  speak(data.answer);
+  
   conversation.push({
 role:"assistant",
 content:data.answer
@@ -265,7 +271,45 @@ chat(
 }
 
 }
+function startVoice(){
 
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+const recognition =
+new SpeechRecognition();
+
+recognition.lang = "de-DE";
+
+recognition.start();
+
+recognition.onresult =
+function(event){
+
+const text =
+event.results[0][0].transcript;
+
+document.getElementById(
+"message"
+).value = text;
+
+sendMessage();
+
+};
+
+}
+  function speak(text){
+
+const speech =
+new SpeechSynthesisUtterance(text);
+
+speech.lang = "de-DE";
+
+speechSynthesis.speak(speech);
+
+}
+``
 </script>
 
 </body>
