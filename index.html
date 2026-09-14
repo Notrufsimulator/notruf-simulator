@@ -98,6 +98,9 @@ padding:10px;
 <div id="status">
 Nummer eingeben
 </div>
+  <div id="timer">
+00:00
+</div>
 
 </div>
 
@@ -120,6 +123,20 @@ Nummer eingeben
 
 <button class="key call" onclick="call112()">
 📞
+</button>
+  <button
+onclick="hangup()"
+style="
+margin-top:10px;
+width:100%;
+padding:10px;
+background:red;
+color:white;
+border:none;
+border-radius:8px;">
+
+🔴 Auflegen
+
 </button>
 
 </div>
@@ -150,6 +167,8 @@ const WORKER_URL =
 
 let currentNumber = "";
   let conversation = [];
+  let seconds = 0;
+let timerInterval;
 
 function add(number){
 
@@ -198,6 +217,7 @@ return;
 document.getElementById("status")
 .innerText =
 "Verbunden mit Leitstelle";
+  startTimer();
 
 document.getElementById("inputArea")
 .style.display =
@@ -310,6 +330,60 @@ speechSynthesis.speak(speech);
 
 }
 ``
+  function startTimer(){
+
+clearInterval(timerInterval);
+
+seconds = 0;
+
+timerInterval = setInterval(() => {
+
+seconds++;
+
+const min =
+String(Math.floor(seconds / 60))
+.padStart(2,"0");
+
+const sec =
+String(seconds % 60)
+.padStart(2,"0");
+
+document.getElementById("timer")
+.innerText =
+min + ":" + sec;
+
+},1000);
+
+}
+  function hangup(){
+
+conversation = [];
+
+currentNumber = "";
+
+document.getElementById("number")
+.innerText = "";
+
+document.getElementById("chat")
+.innerHTML = "";
+
+document.getElementById("status")
+.innerText =
+"Nummer eingeben";
+
+document.getElementById("inputArea")
+.style.display =
+"none";
+
+document.getElementById("timer")
+.innerText =
+"00:00";
+
+clearInterval(timerInterval);
+
+speechSynthesis.cancel();
+
+}
 </script>
 
 </body>
