@@ -223,10 +223,16 @@ document.getElementById("inputArea")
 .style.display =
 "block";
 
+const firstMessage =
+"Notruf 112. Wo befindet sich der Notfall?";
+
 chat(
 "112",
-"Notruf 112. Wo befindet sich der Notfall?"
+firstMessage
 );
+
+speak(firstMessage);
+
   conversation = [];
 
 }
@@ -273,8 +279,9 @@ chat(
 "112",
 data.answer
 );
-  
-  speak(data.answer);
+
+speak(data.answer);
+
   
   conversation.push({
 role:"assistant",
@@ -382,6 +389,22 @@ document.getElementById("timer")
 clearInterval(timerInterval);
 
 speechSynthesis.cancel();
+
+}
+  function speak(text){
+
+if(!("speechSynthesis" in window))
+return;
+
+speechSynthesis.cancel();
+
+const speech =
+new SpeechSynthesisUtterance(text);
+
+speech.lang = "de-DE";
+speech.rate = 1;
+
+speechSynthesis.speak(speech);
 
 }
 </script>
