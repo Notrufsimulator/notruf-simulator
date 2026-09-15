@@ -167,6 +167,7 @@ const WORKER_URL =
 
 let currentNumber = "";
   let conversation = [];
+  let recognition;
   let seconds = 0;
 let timerInterval;
 
@@ -235,7 +236,11 @@ firstMessage
 
 speak(firstMessage);
 
-},300);
+setTimeout(() => {
+
+startVoice();
+
+},3000);
 
   conversation = [];
 
@@ -286,6 +291,13 @@ data.answer
 
 speak(data.answer);
 
+setTimeout(() => {
+
+startVoice();
+
+},3000);
+`
+
   
   conversation.push({
 role:"assistant",
@@ -308,10 +320,14 @@ const SpeechRecognition =
 window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
-const recognition =
+recognition =
 new SpeechRecognition();
 
 recognition.lang = "de-DE";
+
+recognition.continuous = false;
+
+recognition.interimResults = false;
 
 recognition.start();
 
@@ -366,7 +382,13 @@ min + ":" + sec;
 },1000);
 
 }
-  function hangup(){
+  function hangup(
+  if(recognition){
+
+recognition.stop();
+
+}
+  ){
 
 conversation = [];
 
