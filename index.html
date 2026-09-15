@@ -14,165 +14,162 @@
 
 <div class="iphone">
 
-<div class="dynamic-island"></div>
+    <div class="dynamic-island"></div>
 
-<div class="statusbar">
+    <div class="statusbar">
 
-<div id="clock">
-09:41
-</div>
+        <div id="clock">
+            09:41
+        </div>
 
-<div>
-📶 🔋
-</div>
+        <div>
+            📶 🔋
+        </div>
 
-</div>
+    </div>
 
-<!-- HOMESCREEN -->
+    <!-- HOMESCREEN -->
 
-<div id="homeScreen">
+    <div id="homeScreen">
 
-<div class="apps">
+        <div class="apps">
 
-<div class="app" onclick="openPhone()">
+            <div class="app" onclick="openPhone()">
 
-<div class="icon phoneicon">
-📞
-</div>
+                <div class="icon phoneicon">
+                    📞
+                </div>
 
-<span>
-Telefon
-</span>
+                <span>
+                    Telefon
+                </span>
 
-</div>
+            </div>
 
-<div class="app">
+            <div class="app">
 
-<div class="icon">
-📷
-</div>
+                <div class="icon">
+                    📷
+                </div>
 
-<span>
-Kamera
-</span>
+                <span>
+                    Kamera
+                </span>
 
-</div>
+            </div>
 
-<div class="app">
+            <div class="app">
 
-<div class="icon">
-🌍
-</div>
+                <div class="icon">
+                    🌍
+                </div>
 
-<span>
-Safari
-</span>
+                <span>
+                    Safari
+                </span>
 
-</div>
+            </div>
 
-<div class="app">
+            <div class="app">
 
-<div class="icon">
-💬
-</div>
+                <div class="icon">
+                    💬
+                </div>
 
-<span>
-Nachrichten
-</span>
+                <span>
+                    Nachrichten
+                </span>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<!-- TELEFON -->
+    <!-- TELEFON -->
 
-<div id="phoneScreen" class="hidden">
+    <div id="phoneScreen" class="hidden">
 
-<div class="phoneTitle">
-Telefon
-</div>
+        <div class="phoneTitle">
+            Telefon
+        </div>
 
-<div id="number"></div>
+        <div id="number"></div>
 
-<div class="keypad">
+        <div class="keypad">
 
-<button onclick="add('1')">1</button>
-<button onclick="add('2')">2</button>
-<button onclick="add('3')">3</button>
+            <button onclick="add('1')">1</button>
+            <button onclick="add('2')">2</button>
+            <button onclick="add('3')">3</button>
 
-<button onclick="add('4')">4</button>
-<button onclick="add('5')">5</button>
-<button onclick="add('6')">6</button>
+            <button onclick="add('4')">4</button>
+            <button onclick="add('5')">5</button>
+            <button onclick="add('6')">6</button>
 
-<button onclick="add('7')">7</button>
-<button onclick="add('8')">8</button>
-<button onclick="add('9')">9</button>
+            <button onclick="add('7')">7</button>
+            <button onclick="add('8')">8</button>
+            <button onclick="add('9')">9</button>
 
-<button onclick="removeDigit()">⌫</button>
-<button onclick="add('0')">0</button>
+            <button onclick="removeDigit()">⌫</button>
+            <button onclick="add('0')">0</button>
 
-<button class="greenBtn"
-onclick="call112()">
-📞
-</button>
+            <button class="greenBtn"
+            onclick="call112()">
+                📞
+            </button>
 
-</div>
+        </div>
 
-<button
-class="backBtn"
-onclick="goHome()">
+        <button
+        class="backBtn"
+        onclick="goHome()">
 
-Zurück
+            Zurück
 
-</button>
+        </button>
 
-</div>
+    </div>
 
-<!-- ANRUF -->
+    <!-- ANRUFBILDSCHIRM -->
 
-<div id="callScreen" class="hidden">
+    <div id="callScreen" class="hidden">
 
-<div class="ambulance">
+        <div class="ambulance">
+            🚑
+        </div>
 
-🚑
+        <h2>
+            Leitstelle 112
+        </h2>
 
-</div>
+        <div id="timer">
+            00:00
+        </div>
 
-<h2>
-Leitstelle 112
-</h2>
+        <div id="status">
+            Verbinde...
+        </div>
 
-<div id="timer">
-00:00
-</div>
+        <div id="wave">
+            🎤
+        </div>
 
-<div id="status">
-Warte...
-</div>
+        <div id="chat">
+        </div>
 
-<div id="wave">
-🎤
-</div>
+        <button
+        class="redBtn"
+        onclick="hangup()">
 
-<div id="chat">
+            🔴 Auflegen
 
-</div>
+        </button>
 
-<button
-class="redBtn"
-onclick="hangup()">
-
-🔴 Auflegen
-
-</button>
-
-</div>
+    </div>
 
 </div>
 
-<scriptcript>
+<script src="app.js"></script>
 
 </body>
 </html>
