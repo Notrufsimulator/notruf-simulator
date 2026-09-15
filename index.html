@@ -3,137 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leitstelle 112 Simulator</title>
 
-<style>
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-margin:0;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
+<title>Notruf iPhone Simulator</title>
 
-.phone{
-width:420px;
-background:#1e293b;
-border-radius:20px;
-padding:20px;
-}
-
-.display{
-background:#111827;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-#number{
-font-size:40px;
-margin-bottom:10px;
-}
-
-#status{
-color:#22c55e;
-}
-
-.keypad{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:20px;
-}
-
-.key{
-height:70px;
-font-size:24px;
-border:none;
-border-radius:50%;
-background:#374151;
-color:white;
-cursor:pointer;
-}
-
-.call{
-background:#22c55e;
-}
-
-.chat{
-height:250px;
-overflow-y:auto;
-background:#111827;
-margin-top:20px;
-padding:10px;
-border-radius:10px;
-}
-
-.inputArea{
-display:none;
-margin-top:10px;
-}
-
-.inputArea input{
-width:70%;
-padding:10px;
-}
-
-.inputArea button{
-padding:10px;
-}
-</style>
+style.css
 
 </head>
 
 <body>
 
-<div class="phone">
+<div class="iphone">
 
-<div class="display">
+<div class="dynamic-island"></div>
+
+<div class="statusbar">
+
+<div id="clock">
+09:41
+</div>
+
+<div>
+📶 🔋
+</div>
+
+</div>
+
+<!-- HOMESCREEN -->
+
+<div id="homeScreen">
+
+<div class="apps">
+
+<div class="app" onclick="openPhone()">
+
+<div class="icon phoneicon">
+📞
+</div>
+
+<span>
+Telefon
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+📷
+</div>
+
+<span>
+Kamera
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+🌍
+</div>
+
+<span>
+Safari
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+💬
+</div>
+
+<span>
+Nachrichten
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TELEFON -->
+
+<div id="phoneScreen" class="hidden">
+
+<div class="phoneTitle">
+Telefon
+</div>
 
 <div id="number"></div>
 
-<div id="status">
-Nummer eingeben
+<div class="keypad">
+
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+
+<button onclick="add('4')">4</button>
+<button onclick="add('5')">5</button>
+<button onclick="add('6')">6</button>
+
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+
+<button onclick="removeDigit()">⌫</button>
+<button onclick="add('0')">0</button>
+
+<button class="greenBtn"
+onclick="call112()">
+📞
+</button>
+
 </div>
-  <div id="timer">
+
+<button
+class="backBtn"
+onclick="goHome()">
+
+Zurück
+
+</button>
+
+</div>
+
+<!-- ANRUF -->
+
+<div id="callScreen" class="hidden">
+
+<div class="ambulance">
+
+🚑
+
+</div>
+
+<h2>
+Leitstelle 112
+</h2>
+
+<div id="timer">
 00:00
 </div>
 
+<div id="status">
+Warte...
 </div>
 
-<div class="keypad">
+<div id="wave">
+🎤
+</div>
 
-<button class="key" onclick="add('1')">1</button>
-<button class="key" onclick="add('2')">2</button>
-<button class="key" onclick="add('3')">3</button>
+<div id="chat">
 
-<button class="key" onclick="add('4')">4</button>
-<button class="key" onclick="add('5')">5</button>
-<button class="key" onclick="add('6')">6</button>
+</div>
 
-<button class="key" onclick="add('7')">7</button>
-<button class="key" onclick="add('8')">8</button>
-<button class="key" onclick="add('9')">9</button>
-
-<button class="key" onclick="removeDigit()">⌫</button>
-<button class="key" onclick="add('0')">0</button>
-
-<button class="key call" onclick="call112()">
-📞
-</button>
-  <button
-onclick="hangup()"
-style="
-margin-top:10px;
-width:100%;
-padding:10px;
-background:red;
-color:white;
-border:none;
-border-radius:8px;">
+<button
+class="redBtn"
+onclick="hangup()">
 
 🔴 Auflegen
 
@@ -141,330 +170,9 @@ border-radius:8px;">
 
 </div>
 
-<div id="chat" class="chat"></div>
-
-<div id="inputArea" class="inputArea">
-
-<input
-id="message"
-placeholder="Antwort eingeben">
-
-<button onclick="sendMessage()">
-Senden
-</button>
-  <button onclick="startVoice()">
-🎤 Sprechen
-</button>
-
 </div>
 
-</div>
-
-<script>
-
-const WORKER_URL =
-"https://notruf-api.keymasterjonas.workers.dev";
-
-let currentNumber = "";
-  let conversation = [];
-  let recognition;
-  let seconds = 0;
-let timerInterval;
-
-function add(number){
-
-currentNumber += number;
-
-document.getElementById("number")
-.innerText = currentNumber;
-
-}
-
-function removeDigit(){
-
-currentNumber =
-currentNumber.slice(0,-1);
-
-document.getElementById("number")
-.innerText = currentNumber;
-
-}
-
-function chat(sender,text){
-
-const box =
-document.getElementById("chat");
-
-box.innerHTML +=
-`<p><b>${sender}:</b> ${text}</p>`;
-
-box.scrollTop =
-box.scrollHeight;
-
-}
-
-function call112(){
-
-if(currentNumber !== "112"){
-
-document.getElementById("status")
-.innerText =
-"❌ Nummer unbekannt";
-
-return;
-
-}
-
-document.getElementById("status")
-.innerText =
-"Verbunden mit Leitstelle";
-  startTimer();
-
-document.getElementById("inputArea")
-.style.display =
-"block";
-
-const firstMessage =
-"Notruf 112. Wo befindet sich der Notfall?";
-
-setTimeout(() => {
-
-chat(
-"112",
-firstMessage
-);
-
-speak(firstMessage);
-
-setTimeout(() => {
-
-startVoice();
-
-},3000);
-
-  conversation = [];
-
-}
-
-async function sendMessage(){
-
-const input =
-document.getElementById("message");
-
-const text =
-input.value;
-
-if(!text) return;
-
-chat("Du",text);
-
-conversation.push({
-role:"user",
-content:text
-});
-
-input.value = "";
-
-try{
-
-const response =
-await fetch(
-WORKER_URL,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-messages:conversation
-})
-}
-);
-
-const data =
-await response.json();
-
-chat(
-"112",
-data.answer
-);
-
-speak(data.answer);
-
-setTimeout(() => {
-
-startVoice();
-
-},3000);
-`
-
-  
-  conversation.push({
-role:"assistant",
-content:data.answer
-});
-
-}catch{
-
-chat(
-"112",
-"Verbindung zur Leitstelle nicht möglich."
-);
-
-}
-
-}
-function startVoice(){
-
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-recognition =
-new SpeechRecognition();
-
-recognition.lang = "de-DE";
-
-recognition.continuous = false;
-
-recognition.interimResults = false;
-
-recognition.start();
-
-recognition.onresult =
-function(event){
-
-const text =
-event.results[0][0].transcript;
-
-document.getElementById(
-"message"
-).value = text;
-
-sendMessage();
-
-};
-
-}
-  function speak(text){
-
-const speech =
-new SpeechSynthesisUtterance(text);
-
-speech.lang = "de-DE";
-
-speechSynthesis.speak(speech);
-
-}
-``
-  function startTimer(){
-
-clearInterval(timerInterval);
-
-seconds = 0;
-
-timerInterval = setInterval(() => {
-
-seconds++;
-
-const min =
-String(Math.floor(seconds / 60))
-.padStart(2,"0");
-
-const sec =
-String(seconds % 60)
-.padStart(2,"0");
-
-document.getElementById("timer")
-.innerText =
-min + ":" + sec;
-
-},1000);
-
-}
-  function hangup(
-  if(recognition){
-
-recognition.stop();
-
-}
-  ){
-
-conversation = [];
-
-currentNumber = "";
-
-document.getElementById("number")
-.innerText = "";
-
-document.getElementById("chat")
-.innerHTML = "";
-
-document.getElementById("status")
-.innerText =
-"Nummer eingeben";
-
-document.getElementById("inputArea")
-.style.display =
-"none";
-
-document.getElementById("timer")
-.innerText =
-"00:00";
-
-clearInterval(timerInterval);
-
-speechSynthesis.cancel();
-
-}
-  function speak(text){
-
-if(!("speechSynthesis" in window))
-return;
-
-speechSynthesis.cancel();
-
-const speech =
-new SpeechSynthesisUtterance(text);
-
-speech.lang = "de-DE";
-speech.rate = 1;
-
-speechSynthesis.speak(speech);
-
-}
-  function speak(text){
-
-speechSynthesis.cancel();
-
-const utterance =
-new SpeechSynthesisUtterance(text);
-
-utterance.lang = "de-DE";
-utterance.rate = 0.95;
-utterance.pitch = 1;
-
-const voices =
-speechSynthesis.getVoices();
-
-const germanVoice =
-voices.find(v =>
-v.lang.startsWith("de")
-);
-
-if(germanVoice){
-
-utterance.voice =
-germanVoice;
-
-}
-
-speechSynthesis.speak(
-utterance
-);
-
-}
-</script>
+<scriptcript>
 
 </body>
 </html>
