@@ -11,433 +11,353 @@ let timerInterval;
 
 // Uhr
 
-function updateClock(){
+function updateClock() {
 
-const now = new Date();
+    const now = new Date();
 
-const hours =
-String(now.getHours())
-.padStart(2,"0");
+    const hours =
+        String(now.getHours())
+        .padStart(2, "0");
 
-const minutes =
-String(now.getMinutes())
-.padStart(2,"0");
+    const minutes =
+        String(now.getMinutes())
+        .padStart(2, "0");
 
-document.getElementById("clock")
-.innerText =
-hours + ":" + minutes;
-
+    document.getElementById("clock").innerText =
+        hours + ":" + minutes;
 }
 
-setInterval(updateClock,1000);
-
+setInterval(updateClock, 1000);
 updateClock();
 
-// Navigation
 
-function openPhone(){
+// Homescreen / Telefon
 
-document.getElementById(
-"homeScreen"
-).classList.add(
-"hidden"
-);
+function openPhone() {
 
-document.getElementById(
-"phoneScreen"
-).classList.remove(
-"hidden"
-);
+    document.getElementById("homeScreen")
+        .classList.add("hidden");
 
+    document.getElementById("phoneScreen")
+        .classList.remove("hidden");
 }
 
-function goHome(){
+function goHome() {
 
-document.getElementById(
-"phoneScreen"
-).classList.add(
-"hidden"
-);
+    document.getElementById("phoneScreen")
+        .classList.add("hidden");
 
-document.getElementById(
-"homeScreen"
-).classList.remove(
-"hidden"
-);
-
+    document.getElementById("homeScreen")
+        .classList.remove("hidden");
 }
+
 
 // Nummernblock
 
-function add(number){
+function add(number) {
 
-currentNumber += number;
+    currentNumber += number;
 
-document.getElementById(
-"number"
-).innerText =
-currentNumber;
-
+    document.getElementById("number")
+        .innerText = currentNumber;
 }
 
-function removeDigit(){
+function removeDigit() {
 
-currentNumber =
-currentNumber.slice(0,-1);
+    currentNumber =
+        currentNumber.slice(0, -1);
 
-document.getElementById(
-"number"
-).innerText =
-currentNumber;
-
+    document.getElementById("number")
+        .innerText = currentNumber;
 }
+
 
 // Nachrichten
 
-function addMessage(sender,text){
+function addMessage(sender, text) {
 
-const chat =
-document.getElementById(
-"chat"
-);
+    const chat =
+        document.getElementById("chat");
 
-const cssClass =
-sender === "Du"
-? "user"
-: "operator";
+    const cssClass =
+        sender === "Du"
+            ? "user"
+            : "operator";
 
-chat.innerHTML +=
-`
-<div class="message ${cssClass}">
-<b>${sender}:</b><br>
-${text}
-</div>
-`;
+    chat.innerHTML += `
+        <div class="message ${cssClass}">
+            <b>${sender}:</b><br>
+            ${text}
+        </div>
+    `;
 
-chat.scrollTop =
-chat.scrollHeight;
-
+    chat.scrollTop =
+        chat.scrollHeight;
 }
+
 
 // Timer
 
-function startTimer(){
+function startTimer() {
 
-clearInterval(
-timerInterval
-);
+    clearInterval(timerInterval);
 
-seconds = 0;
+    seconds = 0;
 
-timerInterval =
-setInterval(() => {
+    timerInterval =
+        setInterval(() => {
 
-seconds++;
+            seconds++;
 
-const min =
-String(
-Math.floor(seconds/60)
-).padStart(2,"0");
+            const min =
+                String(
+                    Math.floor(seconds / 60)
+                ).padStart(2, "0");
 
-const sec =
-String(
-seconds%60
-).padStart(2,"0");
+            const sec =
+                String(
+                    seconds % 60
+                ).padStart(2, "0");
 
-document.getElementById(
-"timer"
-).innerText =
-min + ":" + sec;
+            document.getElementById("timer")
+                .innerText =
+                min + ":" + sec;
 
-},1000);
-
+        }, 1000);
 }
 
-// Sprachausgabe
 
-function speak(text){
+// Sprache
 
-speechSynthesis.cancel();
+function speak(text) {
 
-const utterance =
-new SpeechSynthesisUtterance(
-text
-);
+    speechSynthesis.cancel();
 
-utterance.lang =
-"de-DE";
+    const utterance =
+        new SpeechSynthesisUtterance(text);
 
-utterance.rate =
-0.95;
+    utterance.lang = "de-DE";
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
 
-const voices =
-speechSynthesis.getVoices();
+    const voices =
+        speechSynthesis.getVoices();
 
-const germanVoice =
-voices.find(v =>
-v.lang.startsWith("de")
-);
+    const germanVoice =
+        voices.find(
+            voice =>
+                voice.lang.startsWith("de")
+        );
 
-if(germanVoice){
+    if (germanVoice) {
+        utterance.voice =
+            germanVoice;
+    }
 
-utterance.voice =
-germanVoice;
-
+    speechSynthesis.speak(
+        utterance
+    );
 }
 
-speechSynthesis.speak(
-utterance
-);
-
-}
 
 // Mikrofon
 
-function startVoice(){
+function startVoice() {
 
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-if(!SpeechRecognition){
+    if (!SpeechRecognition) {
 
-document.getElementById(
-"status"
-).innerText =
-"Spracherkennung nicht unterstützt";
+        document.getElementById("status")
+            .innerText =
+            "Spracherkennung nicht unterstützt";
 
-return;
+        return;
+    }
 
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "de-DE";
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    document.getElementById("status")
+        .innerText =
+        "🎤 Hört zu...";
+
+    recognition.start();
+
+    recognition.onresult =
+        function (event) {
+
+            const text =
+                event.results[0][0]
+                .transcript;
+
+            addMessage(
+                "Du",
+                text
+            );
+
+            sendMessage(text);
+        };
 }
 
-recognition =
-new SpeechRecognition();
 
-recognition.lang =
-"de-DE";
+// OpenRouter
 
-recognition.continuous =
-false;
+async function sendMessage(text) {
 
-recognition.interimResults =
-false;
+    conversation.push({
+        role: "user",
+        content: text
+    });
 
-document.getElementById(
-"status"
-).innerText =
-"🎤 Hört zu...";
+    document.getElementById("status")
+        .innerText =
+        "🤖 Antwortet...";
 
-recognition.start();
+    try {
 
-recognition.onresult =
-function(event){
+        const response =
+            await fetch(
+                WORKER_URL,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        messages: conversation
+                    })
+                }
+            );
 
-const text =
-event.results[0][0]
-.transcript;
+        const data =
+            await response.json();
 
-addMessage(
-"Du",
-text
-);
+        const answer =
+            data.answer ||
+            "Keine Antwort erhalten.";
 
-sendMessage(
-text
-);
+        addMessage(
+            "112",
+            answer
+        );
 
-};
+        conversation.push({
+            role: "assistant",
+            content: answer
+        });
 
+        document.getElementById("status")
+            .innerText =
+            "🔊 Spricht...";
+
+        speak(answer);
+
+        setTimeout(() => {
+
+            startVoice();
+
+        }, 4000);
+
+    } catch (error) {
+
+        addMessage(
+            "112",
+            "Verbindung zur Leitstelle nicht möglich."
+        );
+
+    }
 }
 
-// KI
 
-async function sendMessage(text){
+// Anruf starten
 
-conversation.push({
+function call112() {
 
-role:"user",
+    if (currentNumber !== "112") {
 
-content:text
+        document.getElementById("number")
+            .innerText =
+            "Nummer unbekannt";
 
-});
+        return;
+    }
 
-document.getElementById(
-"status"
-).innerText =
-"🤖 Antwortet...";
+    document.getElementById("phoneScreen")
+        .classList.add("hidden");
 
-try{
+    document.getElementById("callScreen")
+        .classList.remove("hidden");
 
-const response =
-await fetch(
-WORKER_URL,
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/json"
-},
-body:JSON.stringify({
-messages:conversation
-})
-}
-);
+    conversation = [];
 
-const data =
-await response.json();
+    document.getElementById("chat")
+        .innerHTML = "";
 
-const answer =
-data.answer ||
-"Keine Antwort erhalten.";
+    startTimer();
 
-addMessage(
-"112",
-answer
-);
+    const greeting =
+        "Notruf 112. Wo befindet sich der Notfall?";
 
-conversation.push({
+    addMessage(
+        "112",
+        greeting
+    );
 
-role:"assistant",
+    speak(greeting);
 
-content:answer
+    setTimeout(() => {
 
-});
+        startVoice();
 
-document.getElementById(
-"status"
-).innerText =
-"🔊 Spricht...";
-
-speak(
-answer
-);
-
-setTimeout(() => {
-
-startVoice();
-
-},4000);
-
-}catch(error){
-
-addMessage(
-"112",
-"Verbindung zur Leitstelle nicht möglich."
-);
-
+    }, 3500);
 }
 
-}
-
-// Gespräch starten
-
-function call112(){
-
-if(
-currentNumber !== "112"
-){
-
-document.getElementById(
-"number"
-).innerText =
-"Nummer unbekannt";
-
-return;
-
-}
-
-document.getElementById(
-"phoneScreen"
-).classList.add(
-"hidden"
-);
-
-document.getElementById(
-"callScreen"
-).classList.remove(
-"hidden"
-);
-
-conversation = [];
-
-document.getElementById(
-"chat"
-).innerHTML = "";
-
-startTimer();
-
-const greeting =
-"Notruf 112. Wo befindet sich der Notfall?";
-
-addMessage(
-"112",
-greeting
-);
-
-speak(
-greeting
-);
-
-setTimeout(() => {
-
-startVoice();
-
-},3500);
-
-}
 
 // Auflegen
 
-function hangup(){
+function hangup() {
 
-if(recognition){
+    if (recognition) {
 
-try{
+        try {
+            recognition.stop();
+        } catch (e) { }
 
-recognition.stop();
+    }
 
-}catch(e){}
+    speechSynthesis.cancel();
 
-}
+    clearInterval(
+        timerInterval
+    );
 
-speechSynthesis.cancel();
+    conversation = [];
+    currentNumber = "";
 
-clearInterval(
-timerInterval
-);
+    document.getElementById("chat")
+        .innerHTML = "";
 
-conversation = [];
+    document.getElementById("number")
+        .innerText = "";
 
-currentNumber = "";
+    document.getElementById("timer")
+        .innerText = "00:00";
 
-document.getElementById(
-"chat"
-).innerHTML = "";
+    document.getElementById("status")
+        .innerText =
+        "Anruf beendet";
 
-document.getElementById(
-"number"
-).innerText = "";
+    document.getElementById("callScreen")
+        .classList.add("hidden");
 
-document.getElementById(
-"timer"
-).innerText =
-"00:00";
-
-document.getElementById(
-"status"
-).innerText =
-"Anruf beendet";
-
-document.getElementById(
-"callScreen"
-).classList.add(
-"hidden"
-);
-
-document.getElementById(
-"homeScreen"
-).classList.remove(
-"hidden"
-);
-
+    document.getElementById("homeScreen")
+        .classList.remove("hidden");
 }
