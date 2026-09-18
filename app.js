@@ -3,12 +3,13 @@ const WORKER_URL =
 
 let currentNumber = "";
 let conversation = [];
+
 let recognition = null;
 
 let seconds = 0;
 let timerInterval;
 
-// Uhrzeit oben
+// Uhr
 
 function updateClock(){
 
@@ -38,11 +39,15 @@ function openPhone(){
 
 document.getElementById(
 "homeScreen"
-).classList.add("hidden");
+).classList.add(
+"hidden"
+);
 
 document.getElementById(
 "phoneScreen"
-).classList.remove("hidden");
+).classList.remove(
+"hidden"
+);
 
 }
 
@@ -50,11 +55,15 @@ function goHome(){
 
 document.getElementById(
 "phoneScreen"
-).classList.add("hidden");
+).classList.add(
+"hidden"
+);
 
 document.getElementById(
 "homeScreen"
-).classList.remove("hidden");
+).classList.remove(
+"hidden"
+);
 
 }
 
@@ -83,12 +92,14 @@ currentNumber;
 
 }
 
-// Chat
+// Nachrichten
 
 function addMessage(sender,text){
 
 const chat =
-document.getElementById("chat");
+document.getElementById(
+"chat"
+);
 
 const cssClass =
 sender === "Du"
@@ -112,22 +123,25 @@ chat.scrollHeight;
 
 function startTimer(){
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 seconds = 0;
 
-timerInterval = setInterval(() => {
+timerInterval =
+setInterval(() => {
 
 seconds++;
 
 const min =
 String(
-Math.floor(seconds / 60)
+Math.floor(seconds/60)
 ).padStart(2,"0");
 
 const sec =
 String(
-seconds % 60
+seconds%60
 ).padStart(2,"0");
 
 document.getElementById(
@@ -139,18 +153,22 @@ min + ":" + sec;
 
 }
 
-// Sprache
+// Sprachausgabe
 
 function speak(text){
 
 speechSynthesis.cancel();
 
 const utterance =
-new SpeechSynthesisUtterance(text);
+new SpeechSynthesisUtterance(
+text
+);
 
-utterance.lang = "de-DE";
-utterance.rate = 0.95;
-utterance.pitch = 1;
+utterance.lang =
+"de-DE";
+
+utterance.rate =
+0.95;
 
 const voices =
 speechSynthesis.getVoices();
@@ -186,27 +204,28 @@ if(!SpeechRecognition){
 document.getElementById(
 "status"
 ).innerText =
-"Browser unterstützt Sprache nicht";
+"Spracherkennung nicht unterstützt";
 
 return;
 
 }
 
-document.getElementById(
-"status"
-).innerText =
-"🎤 Hört zu...";
-
 recognition =
 new SpeechRecognition();
 
-recognition.lang = "de-DE";
+recognition.lang =
+"de-DE";
+
+recognition.continuous =
+false;
 
 recognition.interimResults =
 false;
 
-recognition.continuous =
-false;
+document.getElementById(
+"status"
+).innerText =
+"🎤 Hört zu...";
 
 recognition.start();
 
@@ -214,7 +233,8 @@ recognition.onresult =
 function(event){
 
 const text =
-event.results[0][0].transcript;
+event.results[0][0]
+.transcript;
 
 addMessage(
 "Du",
@@ -228,6 +248,8 @@ text
 };
 
 }
+
+// KI
 
 async function sendMessage(text){
 
@@ -252,7 +274,8 @@ WORKER_URL,
 {
 method:"POST",
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
 body:JSON.stringify({
 messages:conversation
@@ -263,16 +286,20 @@ messages:conversation
 const data =
 await response.json();
 
+const answer =
+data.answer ||
+"Keine Antwort erhalten.";
+
 addMessage(
 "112",
-data.answer
+answer
 );
 
 conversation.push({
 
 role:"assistant",
 
-content:data.answer
+content:answer
 
 });
 
@@ -282,7 +309,7 @@ document.getElementById(
 "🔊 Spricht...";
 
 speak(
-data.answer
+answer
 );
 
 setTimeout(() => {
@@ -302,16 +329,18 @@ addMessage(
 
 }
 
-// Anruf
+// Gespräch starten
 
 function call112(){
 
-if(currentNumber !== "112"){
+if(
+currentNumber !== "112"
+){
 
 document.getElementById(
 "number"
 ).innerText =
-"Unbekannt";
+"Nummer unbekannt";
 
 return;
 
@@ -330,6 +359,10 @@ document.getElementById(
 );
 
 conversation = [];
+
+document.getElementById(
+"chat"
+).innerHTML = "";
 
 startTimer();
 
