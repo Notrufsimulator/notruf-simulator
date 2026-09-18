@@ -6,7 +6,7 @@
 
 <title>Notruf iPhone Simulator</title>
 
-style.css
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -113,9 +113,12 @@ Telefon
 <button onclick="removeDigit()">⌫</button>
 <button onclick="add('0')">0</button>
 
-<button class="greenBtn"
+<button
+class="greenBtn"
 onclick="call112()">
+
 📞
+
 </button>
 
 </div>
@@ -135,9 +138,7 @@ Zurück
 <div id="callScreen" class="hidden">
 
 <div class="ambulance">
-
 🚑
-
 </div>
 
 <h2>
@@ -149,7 +150,7 @@ Leitstelle 112
 </div>
 
 <div id="status">
-Warte...
+Verbinde...
 </div>
 
 <div id="wave">
@@ -157,7 +158,6 @@ Warte...
 </div>
 
 <div id="chat">
-
 </div>
 
 <button
@@ -172,7 +172,7 @@ onclick="hangup()">
 
 </div>
 
-app.jsscript>
+<script src="app.js"></script>
 
 </body>
 </html>
