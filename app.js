@@ -3,6 +3,7 @@ const WORKER_URL =
 
 let currentNumber = "";
 let conversation = [];
+let fullConversation = [];
 let recognition = null;
 
 let seconds = 0;
