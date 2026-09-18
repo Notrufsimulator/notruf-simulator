@@ -6,7 +6,7 @@
 
 <title>Notruf iPhone Simulator</title>
 
-<link rel="stylesheet" href="style.css">
+style.css
 
 </head>
 
@@ -14,163 +14,165 @@
 
 <div class="iphone">
 
-    <div class="dynamic-island"></div>
+<div class="dynamic-island"></div>
 
-    <div class="statusbar">
+<div class="statusbar">
 
-        <div id="clock">
-            09:41
-        </div>
+<div id="clock">
+09:41
+</div>
 
-        <div>
-            📶 🔋
-        </div>
-
-    </div>
-
-    <!-- HOMESCREEN -->
-
-    <div id="homeScreen">
-
-        <div class="apps">
-
-            <div class="app" onclick="openPhone()">
-
-                <div class="icon phoneicon">
-                    📞
-                </div>
-
-                <span>
-                    Telefon
-                </span>
-
-            </div>
-
-            <div class="app">
-
-                <div class="icon">
-                    📷
-                </div>
-
-                <span>
-                    Kamera
-                </span>
-
-            </div>
-
-            <div class="app">
-
-                <div class="icon">
-                    🌍
-                </div>
-
-                <span>
-                    Safari
-                </span>
-
-            </div>
-
-            <div class="app">
-
-                <div class="icon">
-                    💬
-                </div>
-
-                <span>
-                    Nachrichten
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- TELEFON -->
-
-    <div id="phoneScreen" class="hidden">
-
-        <div class="phoneTitle">
-            Telefon
-        </div>
-
-        <div id="number"></div>
-
-        <div class="keypad">
-
-            <button onclick="add('1')">1</button>
-            <button onclick="add('2')">2</button>
-            <button onclick="add('3')">3</button>
-
-            <button onclick="add('4')">4</button>
-            <button onclick="add('5')">5</button>
-            <button onclick="add('6')">6</button>
-
-            <button onclick="add('7')">7</button>
-            <button onclick="add('8')">8</button>
-            <button onclick="add('9')">9</button>
-
-            <button onclick="removeDigit()">⌫</button>
-            <button onclick="add('0')">0</button>
-
-            <button class="greenBtn"
-            onclick="call112()">
-                📞
-            </button>
-
-        </div>
-
-        <button
-        class="backBtn"
-        onclick="goHome()">
-
-            Zurück
-
-        </button>
-
-    </div>
-
-    <!-- ANRUFBILDSCHIRM -->
-
-    <div id="callScreen" class="hidden">
-
-        <div class="ambulance">
-            🚑
-        </div>
-
-        <h2>
-            Leitstelle 112
-        </h2>
-
-        <div id="timer">
-            00:00
-        </div>
-
-        <div id="status">
-            Verbinde...
-        </div>
-
-        <div id="wave">
-            🎤
-        </div>
-
-        <div id="chat">
-        </div>
-
-        <button
-        class="redBtn"
-        onclick="hangup()">
-
-            🔴 Auflegen
-
-        </button>
-
-    </div>
+<div>
+📶 🔋
+</div>
 
 </div>
 
-<script src="https://cdnjs.cloudflare.compdf/2.5.1/jspdf.umd.min.jsscript>
-<script src="app.js"></script>
+<!-- HOMESCREEN -->
+
+<div id="homeScreen">
+
+<div class="apps">
+
+<div class="app" onclick="openPhone()">
+
+<div class="icon phoneicon">
+📞
+</div>
+
+<span>
+Telefon
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+📷
+</div>
+
+<span>
+Kamera
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+🌍
+</div>
+
+<span>
+Safari
+</span>
+
+</div>
+
+<div class="app">
+
+<div class="icon">
+💬
+</div>
+
+<span>
+Nachrichten
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TELEFON -->
+
+<div id="phoneScreen" class="hidden">
+
+<div class="phoneTitle">
+Telefon
+</div>
+
+<div id="number"></div>
+
+<div class="keypad">
+
+<button onclick="add('1')">1</button>
+<button onclick="add('2')">2</button>
+<button onclick="add('3')">3</button>
+
+<button onclick="add('4')">4</button>
+<button onclick="add('5')">5</button>
+<button onclick="add('6')">6</button>
+
+<button onclick="add('7')">7</button>
+<button onclick="add('8')">8</button>
+<button onclick="add('9')">9</button>
+
+<button onclick="removeDigit()">⌫</button>
+<button onclick="add('0')">0</button>
+
+<button class="greenBtn"
+onclick="call112()">
+📞
+</button>
+
+</div>
+
+<button
+class="backBtn"
+onclick="goHome()">
+
+Zurück
+
+</button>
+
+</div>
+
+<!-- ANRUF -->
+
+<div id="callScreen" class="hidden">
+
+<div class="ambulance">
+
+🚑
+
+</div>
+
+<h2>
+Leitstelle 112
+</h2>
+
+<div id="timer">
+00:00
+</div>
+
+<div id="status">
+Warte...
+</div>
+
+<div id="wave">
+🎤
+</div>
+
+<div id="chat">
+
+</div>
+
+<button
+class="redBtn"
+onclick="hangup()">
+
+🔴 Auflegen
+
+</button>
+
+</div>
+
+</div>
+
+app.jsscript>
 
 </body>
 </html>
