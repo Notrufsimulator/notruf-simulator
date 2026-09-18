@@ -1,144 +1,138 @@
 *{
 margin:0;
 padding:0;
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,
-"SF Pro Display",
+box-sizing*border-box;
+font-family:-apple-sys*em,BlinkMacSystemFont,
+"SF Pro Dis*lay",
 sans-serif;
 }
 
 body{
 
-height:100vh;
+height*100vh;
 
 display:flex;
-justify-content:center;
+justify-cont*nt:center;
 align-items:center;
 
-background:
+ba*kground:
 linear-gradient(
 135deg,
-#0f172a,
+*0f172a,
 #1e293b,
 #0f172a
 );
 
 }
 
-.iphone{
+.i*hone{
 
 width:430px;
 height:860px;
+*background:black*
 
-background:black;
-
-border-radius:60px;
+*order-radius:60px;
 
 padding:20px;
+*border:10px solid #101010;
 
-border:10px solid #101010;
-
-overflow:hidden;
+overfl*w:hidden;
 
 position:relative;
 
-box-shadow:
-0 30px 90px rgba(0,0,0,.5);
+box*shadow:
+0 30px 90px rgba(0,0,0,.5)*
 
 }
 
 .dynamic-island{
 
-position:absolute;
+position:ab*olute;
 
 top:10px;
 left:50%;
 
-transform:translateX(-50%);
+trans*orm:translateX(-50%);
 
-width:130px;
+width:130px*
 height:34px;
 
 background:#111;
 
-border-radius:30px;
+b*rder-radius:30px;
 
 z-index:50;
 
 }
-
-.statusbar{
+*.statusbar{
 
 display:flex;
 
-justify-content:space-between;
+justif*-content:space-between;
 
-padding-top:20px;
+padding-t*p:20px;
 
 margin-bottom:25px;
 
-font-size:14px;
+font*size:14px;
 
 color:white;
 
 }
 
-.apps{
+.apps*
 
 display:grid;
 
-grid-template-columns:
+grid-template-col*mns:
 repeat(4,1fr);
 
 gap:20px;
 
-padding-top:40px;
+pa*ding-top:40px;
 
 }
 
 .app{
 
-display:flex;
+display:*lex;
 
 flex-direction:column;
 
-align-items:center;
+alig*-items:center;
 
 cursor:pointer;
 
-}
-
+}*
 .icon{
 
 width:65px;
 height:65px;
+*border-radius:16px;
 
-border-radius:16px;
-
-display:flex;
-
+display:flex;*
 justify-content:center;
-align-items:center;
+align-ite*s:center;
 
 font-size:32px;
 
-background:#222;
+backgr*und:#222;
 
 }
 
 .phoneicon{
 
-background:#34c759;
+backgro*nd:#34c759;
 
 }
 
 .app span{
 
-margin-top:8px;
+margin*top:8px;
 
 font-size:12px;
 
-color:white;
+color:w*ite;
 
 }
 
@@ -146,19 +140,17 @@ color:white;
 
 display:none;
 
-}
+*
 
 .phoneTitle{
 
-text-align:center;
-
+text-align:center;*
 font-size:28px;
 
-font-weight:600;
-
+font-weight:600;*
 margin-top:20px;
 
-margin-bottom:30px;
+margin-bottom:3*px;
 
 color:white;
 
@@ -166,107 +158,114 @@ color:white;
 
 #number{
 
-text-align:center;
+te*t-align:center;
 
 font-size:42px;
 
-height:60px;
+*eight:60px;
 
 color:white;
 
 }
 
-.keypad{
+.key*ad{
 
 display:grid;
 
-grid-template-columns:
+grid-template-*olumns:
 repeat(3,1fr);
 
 gap:15px;
-
-margin-top:15px;
+*margin-top:15px;
 
 }
 
-.keypad button{
+.keypad butto*{
 
 width:80px;
 height:80px;
 
-margin:auto;
+margi*:auto;
 
 border:none;
 
-border-radius:50%;
+border-radiu*:50%;
 
 font-size:26px;
 
-cursor:pointer;
+cursor:poi*ter;
 
 background:#2c2c2e;
 
-color:white;
+color:w*ite;
+
+transition:.2s;
+
+}
+
+.keypad *utton:hover{
+
+transform:scale(1.05*;
 
 }
 
 .greenBtn{
 
-background:#34c759 !important;
+background:#34c7*9 !important;
 
 }
 
 .backBtn{
 
-margin-top:20px;
+margi*-top:20px;
 
 width:100%;
 
-padding:12px;
+padding:1*px;
 
 border:none;
 
-border-radius:14px;
+border-radius:1*px;
 
 background:#2c2c2e;
 
-color:white;
+color:wh*te;
 
 cursor:pointer;
+
+font-size:16*x;
 
 }
 
 #callScreen{
 
-text-align:center;
+text-align:ce*ter;
 
 color:white;
 
 }
 
-.ambulance{
-
+.ambulance{*
 font-size:90px;
 
-margin-top:40px;
-
+margin-top:40px;*
 }
 
 #timer{
 
 font-size:24px;
 
-margin-top:10px;
+marg*n-top:10px;
 
 color:#d1d5db;
 
 }
 
-#status{
+#s*atus{
 
 margin-top:10px;
 
-font-size:18px;
+font-size*18px;
 
 color:#34c759;
 
@@ -274,66 +273,62 @@ color:#34c759;
 
 #wave{
 
-font-size:42px;
+*ont-size:42px;
 
 margin-top:20px;
 
-animation:
+*nimation:
 pulse 1.5s infinite;
 
 }
-
-@keyframes pulse{
+*@keyframes pulse{
 
 0%{
-transform:scale(1);
+transform:s*ale(1);
 }
 
 50%{
-transform:scale(1.2);
+transform:scale(1.*);
 }
 
 100%{
 transform:scale(1);
 }
-
-}
+*}
 
 #chat{
 
 margin-top:20px;
 
-height:250px;
+heigh*:250px;
 
 overflow-y:auto;
 
-background:#111827;
+backgro*nd:#111827;
 
 padding:15px;
 
-border-radius:20px;
+border*radius:20px;
 
 text-align:left;
 
 }
-
-.redBtn{
+*.redBtn{
 
 margin-top:20px;
 
-width:100%;
+width:*00%;
 
 padding:15px;
 
-background:#ff3b30;
+background:#f*3b30;
 
 color:white;
 
 border:none;
+*border-radius:16px;
 
-border-radius:16px;
-
-font-size:18px;
+font-size:18p*;
 
 cursor:pointer;
 
@@ -341,9 +336,9 @@ cursor:pointer;
 
 .message{
 
-margin-bottom:12px;
+*argin-bottom:12px;
 
-line-height:1.4;
+line-height:1.*;
 
 }
 
@@ -353,21 +348,21 @@ color:#0a84ff;
 
 }
 
-.operator{
+.*perator{
 
 color:#30d158;
 
 }
 
-::-webkit-scrollbar{
+::-we*kit-scrollbar{
 
 width:4px;
 
 }
 
-::-webkit-scrollbar-thumb{
+::-*ebkit-scrollbar-thumb{
 
-background:#555;
+background*#555;
 
 border-radius:10px;
 
