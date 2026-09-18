@@ -3,16 +3,12 @@ const WORKER_URL =
 
 let currentNumber = "";
 let conversation = [];
-let fullConversation = [];
-
 let recognition = null;
 
 let seconds = 0;
 let timerInterval;
 
-// --------------------
-// UHR
-// --------------------
+// Uhrzeit oben
 
 function updateClock(){
 
@@ -36,23 +32,17 @@ setInterval(updateClock,1000);
 
 updateClock();
 
-// --------------------
-// NAVIGATION
-// --------------------
+// Navigation
 
 function openPhone(){
 
 document.getElementById(
 "homeScreen"
-).classList.add(
-"hidden"
-);
+).classList.add("hidden");
 
 document.getElementById(
 "phoneScreen"
-).classList.remove(
-"hidden"
-);
+).classList.remove("hidden");
 
 }
 
@@ -60,21 +50,15 @@ function goHome(){
 
 document.getElementById(
 "phoneScreen"
-).classList.add(
-"hidden"
-);
+).classList.add("hidden");
 
 document.getElementById(
 "homeScreen"
-).classList.remove(
-"hidden"
-);
+).classList.remove("hidden");
 
 }
 
-// --------------------
-// TASTATUR
-// --------------------
+// Nummernblock
 
 function add(number){
 
@@ -99,16 +83,12 @@ currentNumber;
 
 }
 
-// --------------------
-// CHAT
-// --------------------
+// Chat
 
 function addMessage(sender,text){
 
 const chat =
-document.getElementById(
-"chat"
-);
+document.getElementById("chat");
 
 const cssClass =
 sender === "Du"
@@ -128,28 +108,21 @@ chat.scrollHeight;
 
 }
 
-// --------------------
-// TIMER
-// --------------------
+// Timer
 
 function startTimer(){
 
-clearInterval(
-timerInterval
-);
+clearInterval(timerInterval);
 
 seconds = 0;
 
-timerInterval =
-setInterval(() => {
+timerInterval = setInterval(() => {
 
 seconds++;
 
 const min =
 String(
-Math.floor(
-seconds / 60
-)
+Math.floor(seconds / 60)
 ).padStart(2,"0");
 
 const sec =
@@ -166,27 +139,18 @@ min + ":" + sec;
 
 }
 
-// --------------------
-// SPRACHE
-// --------------------
+// Sprache
 
 function speak(text){
 
 speechSynthesis.cancel();
 
 const utterance =
-new SpeechSynthesisUtterance(
-text
-);
+new SpeechSynthesisUtterance(text);
 
-utterance.lang =
-"de-DE";
-
-utterance.rate =
-0.95;
-
-utterance.pitch =
-1;
+utterance.lang = "de-DE";
+utterance.rate = 0.95;
+utterance.pitch = 1;
 
 const voices =
 speechSynthesis.getVoices();
@@ -209,9 +173,7 @@ utterance
 
 }
 
-// --------------------
-// MIKROFON
-// --------------------
+// Mikrofon
 
 function startVoice(){
 
@@ -224,28 +186,27 @@ if(!SpeechRecognition){
 document.getElementById(
 "status"
 ).innerText =
-"Spracherkennung wird nicht unterstützt";
+"Browser unterstützt Sprache nicht";
 
 return;
 
 }
 
-recognition =
-new SpeechRecognition();
-
-recognition.lang =
-"de-DE";
-
-recognition.continuous =
-false;
-
-recognition.interimResults =
-false;
-
 document.getElementById(
 "status"
 ).innerText =
 "🎤 Hört zu...";
+
+recognition =
+new SpeechRecognition();
+
+recognition.lang = "de-DE";
+
+recognition.interimResults =
+false;
+
+recognition.continuous =
+false;
 
 recognition.start();
 
@@ -253,16 +214,11 @@ recognition.onresult =
 function(event){
 
 const text =
-event.results[0][0]
-.transcript;
+event.results[0][0].transcript;
 
 addMessage(
 "Du",
 text
-);
-
-fullConversation.push(
-"DU: " + text
 );
 
 sendMessage(
@@ -272,10 +228,6 @@ text
 };
 
 }
-
-// --------------------
-// KI
-// --------------------
 
 async function sendMessage(text){
 
@@ -300,8 +252,7 @@ WORKER_URL,
 {
 method:"POST",
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json"
 },
 body:JSON.stringify({
 messages:conversation
@@ -314,11 +265,6 @@ await response.json();
 
 addMessage(
 "112",
-data.answer
-);
-
-fullConversation.push(
-"112: " +
 data.answer
 );
 
@@ -356,20 +302,16 @@ addMessage(
 
 }
 
-// --------------------
-// ANRUF
-// --------------------
+// Anruf
 
 function call112(){
 
-if(
-currentNumber !== "112"
-){
+if(currentNumber !== "112"){
 
 document.getElementById(
 "number"
 ).innerText =
-"Nummer unbekannt";
+"Unbekannt";
 
 return;
 
@@ -389,8 +331,6 @@ document.getElementById(
 
 conversation = [];
 
-fullConversation = [];
-
 startTimer();
 
 const greeting =
@@ -401,4 +341,70 @@ addMessage(
 greeting
 );
 
-fullConversation
+speak(
+greeting
+);
+
+setTimeout(() => {
+
+startVoice();
+
+},3500);
+
+}
+
+// Auflegen
+
+function hangup(){
+
+if(recognition){
+
+try{
+
+recognition.stop();
+
+}catch(e){}
+
+}
+
+speechSynthesis.cancel();
+
+clearInterval(
+timerInterval
+);
+
+conversation = [];
+
+currentNumber = "";
+
+document.getElementById(
+"chat"
+).innerHTML = "";
+
+document.getElementById(
+"number"
+).innerText = "";
+
+document.getElementById(
+"timer"
+).innerText =
+"00:00";
+
+document.getElementById(
+"status"
+).innerText =
+"Anruf beendet";
+
+document.getElementById(
+"callScreen"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"homeScreen"
+).classList.remove(
+"hidden"
+);
+
+}
