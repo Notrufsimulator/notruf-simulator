@@ -221,6 +221,9 @@ addMessage(
 "Du",
 text
 );
+fullConversation.push(
+"DU: " + text
+);
 
 sendMessage(
 text
@@ -267,6 +270,9 @@ await response.json();
 addMessage(
 "112",
 data.answer
+);
+fullConversation.push(
+"112: " + data.answer
 );
 
 conversation.push({
@@ -358,6 +364,8 @@ startVoice();
 
 function hangup(){
 
+generatePDF();
+
 if(recognition){
 
 try{
@@ -407,5 +415,10 @@ document.getElementById(
 ).classList.remove(
 "hidden"
 );
+
+}
+async function generatePDF(){
+
+// PDF Code hier
 
 }
